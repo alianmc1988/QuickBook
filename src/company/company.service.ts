@@ -4,7 +4,6 @@ import { CreateCompanyDto } from './dto/create-company.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from './entities/company.entity';
 import { Repository } from 'typeorm';
-import { UUID } from 'crypto';
 
 @Injectable()
 export class CompanyService {
@@ -21,7 +20,7 @@ export class CompanyService {
     return this.companyRepository.find({ relations: ['spaces'] });
   }
 
-  async findOne(id: UUID): Promise<Company> {
+  async findOne(id: string): Promise<Company> {
     const company = await this.companyRepository.findOne({
       where: { id },
       relations: ['spaces'],

@@ -3,12 +3,16 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  OneToMany,
+  DeleteDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
+import { Role } from './Role.entity';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ unique: true })
   email: string;
@@ -19,9 +23,15 @@ export class User {
   @Column()
   password: string;
 
-  @Column({ default: 'usuario' })
-  rol: 'admin' | 'staff' | 'usuario';
+  @OneToMany(() => Role, (role) => role.user)
+  roles: Role[];
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @DeleteDateColumn({ default: null })
+  deletedAt: Date | null;
 }
