@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 import { Space } from './space.entity';
+import { Role } from '../../user/entities/Role.entity';
 
 @Entity()
 export class Company {
@@ -15,9 +16,7 @@ export class Company {
   @Column()
   name: string;
 
-  @Column({
-    unique: true,
-  })
+  @Column({})
   address: string;
 
   @Column({
@@ -33,6 +32,9 @@ export class Company {
 
   @OneToMany(() => Space, (space) => space.company)
   spaces: Space[];
+
+  @OneToMany(() => Role, (role) => role.company)
+  roles: Role[];
 
   @CreateDateColumn()
   createdAt: Date;
