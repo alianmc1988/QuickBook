@@ -5,18 +5,21 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { CompanyModule } from './company/company.module';
 import { ReservationModule } from './reservation/reservation.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import configuration from './config/configuration';
+import { dbConfigFactory } from './database/dbConfig';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'root',
-      password: 'root',
-      database: 'quickbook_db',
-      autoLoadEntities: true,
-      synchronize: true, // ⚠️ Solo en desarrollo, no en producción
+    ConfigModule.forRoot({
+      envFilePath: ['.env.local'],
+      load: [configuration],
+      isGlobal: true,
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: dbConfigFactory,
+      inject: [ConfigService],
     }),
     UserModule,
     CompanyModule,
