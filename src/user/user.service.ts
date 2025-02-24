@@ -105,4 +105,14 @@ export class UserService {
     await this.userRepository.restore(id);
     this.logger.log('Restore User flow ended successfully');
   }
+
+  async findByEmailAndPassword(
+    email: string,
+    password: string,
+  ): Promise<User | null> {
+    return this.userRepository.findOneBy({
+      email,
+      password,
+    });
+  }
 }
