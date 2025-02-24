@@ -6,13 +6,14 @@ import { UserModule } from './user/user.module';
 import { CompanyModule } from './company/company.module';
 import { ReservationModule } from './reservation/reservation.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import configuration from './config/configuration';
+import configuration, { envConfig } from './config/configuration';
 import { dbConfigFactory } from './database/dbConfig';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['.env.local'],
+      envFilePath: envConfig(process.env.NODE_ENV),
       load: [configuration],
       isGlobal: true,
     }),
@@ -24,6 +25,7 @@ import { dbConfigFactory } from './database/dbConfig';
     UserModule,
     CompanyModule,
     ReservationModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
